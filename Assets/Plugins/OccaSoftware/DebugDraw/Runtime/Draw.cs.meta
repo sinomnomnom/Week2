@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: a0ef0bc71086c4e26b414b070ac6e19c
+AssetOrigin:
+  serializedVersion: 1
+  productId: 392176
+  packageName: 'Debug Draw: Runtime Lines, Shapes & Labels'
+  packageVersion: 1.0
+  assetPath: Assets/OccaSoftware/DebugDraw/Runtime/Draw.cs
+  uploadId: 955598

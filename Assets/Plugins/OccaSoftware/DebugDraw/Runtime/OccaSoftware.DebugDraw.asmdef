@@ -1,0 +1,9 @@
+{
+    "name": "OccaSoftware.DebugDraw",
+    "rootNamespace": "OccaSoftware.DebugDraw",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "autoReferenced": true
+}

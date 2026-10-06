@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e9e423b5a2d5e43dfb6de146c6ca6c8a
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 392176
+  packageName: 'Debug Draw: Runtime Lines, Shapes & Labels'
+  packageVersion: 1.0
+  assetPath: Assets/OccaSoftware/DebugDraw/Runtime/Resources/DebugDrawLines.shader
+  uploadId: 955598

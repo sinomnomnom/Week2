@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0cc1721c6e3c54b94b20d53197fd965a
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 392176
+  packageName: 'Debug Draw: Runtime Lines, Shapes & Labels'
+  packageVersion: 1.0
+  assetPath: Assets/OccaSoftware/DebugDraw/Runtime/OccaSoftware.DebugDraw.asmdef
+  uploadId: 955598

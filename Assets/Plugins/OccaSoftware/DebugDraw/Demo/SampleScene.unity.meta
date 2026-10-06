@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d6a95c816cf6a4c3f8d3fd6af4232cc1
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 392176
+  packageName: 'Debug Draw: Runtime Lines, Shapes & Labels'
+  packageVersion: 1.0
+  assetPath: Assets/OccaSoftware/DebugDraw/Demo/SampleScene.unity
+  uploadId: 955598

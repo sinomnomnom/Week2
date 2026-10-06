@@ -1,0 +1,1 @@
+{ "name": "OccaSoftware.DebugDraw.Demo", "rootNamespace": "OccaSoftware.DebugDraw.Demo", "references": ["OccaSoftware.DebugDraw"], "includePlatforms": [], "autoReferenced": true }
