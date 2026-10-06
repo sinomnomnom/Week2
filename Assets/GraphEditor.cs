@@ -8,13 +8,14 @@ public class GraphEditor : MonoBehaviour
 {
     public enum EditMode
     {
-        MOVE, ADD
+        MOVE, ADD, DELETE
     }
 
     public Dictionary<EditMode, Color> EditColors = new Dictionary<EditMode, Color>
     {
         { EditMode.MOVE, Color.darkGreen },
         { EditMode.ADD, Color.yellow },
+        { EditMode.DELETE, Color.red}
     };
     
     public Graph graph;
@@ -69,6 +70,10 @@ public class GraphEditor : MonoBehaviour
                     case EditMode.MOVE:
                         selectedNode.position = mousePos;
                         break;
+                    case EditMode.DELETE:
+                        graph.RemoveNode(selectedNode);
+                        selectedNode = null;
+                        break;
                     default:
                         break;
                 }
@@ -78,9 +83,18 @@ public class GraphEditor : MonoBehaviour
                     switch (editMode)
                     {
                         case EditMode.ADD:
-                            graph.AddConnectedNode(selectedNode,mousePos);
+                            if (hoveredNode != null && selectedNode != hoveredNode)
+                            {
+                                selectedNode.AddConnection(hoveredNode);
+                            }
+                            else
+                            {
+                                graph.AddConnectedNode(selectedNode, mousePos);
+                            }
                             break;
                         case EditMode.MOVE:
+                            break;
+                        case EditMode.DELETE:
                             break;
                         default:
                             break;

@@ -49,11 +49,22 @@ public class Graph
         connectedNode.AddConnection(newNode);
         return newNode;
     }
+
+    public void RemoveNode(Node node)
+    {
+        nodes.Remove(node);
+        foreach (Node otherNode in nodes)
+        {
+            otherNode.RemoveConnection(node);
+        }
+    }
 }
 public class GraphRenderer : MonoBehaviour
 {
     public Graph graph;
     public Color color = Color.white;
+    public bool showNodes = true;
+    float nodeSize = 0.2f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -80,6 +91,7 @@ public class GraphRenderer : MonoBehaviour
             {
                 Draw.Line(from.position, to.position, color);
             }
+            if(showNodes) Draw.Box(from.position,new Vector3(nodeSize,nodeSize,nodeSize), color);
         }
     }
 }
