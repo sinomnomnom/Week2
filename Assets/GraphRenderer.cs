@@ -3,7 +3,7 @@ using OccaSoftware.DebugDraw;
 using UnityEngine;
 using UnityEditor;
 
-public struct Node
+public class Node
 {
     public Vector2 position;
     public List<Node> connectedNodes;
@@ -32,7 +32,7 @@ public struct Node
     }
 }
 
-public struct Graph
+public class Graph
 {
     public List<Node> nodes;
 
@@ -41,10 +41,19 @@ public struct Graph
         if (nodes == null) this.nodes = new List<Node>();
         else this.nodes = nodes;
     }
+
+    public Node AddConnectedNode(Node connectedNode, Vector2 position)
+    {
+        Node newNode = new Node(position);
+        nodes.Add(newNode);
+        connectedNode.AddConnection(newNode);
+        return newNode;
+    }
 }
 public class GraphRenderer : MonoBehaviour
 {
     public Graph graph;
+    public Color color = Color.white;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -59,6 +68,8 @@ public class GraphRenderer : MonoBehaviour
         nodes.Add(node2);
         nodes.Add(node3);
         graph = new Graph(nodes);
+        
+        GetComponent<GraphEditor>().graph = graph;
     }
 
     void Update()
@@ -67,7 +78,7 @@ public class GraphRenderer : MonoBehaviour
         {
             foreach (Node to in from.connectedNodes)
             {
-                Draw.Line(from.position, to.position, Color.white);
+                Draw.Line(from.position, to.position, color);
             }
         }
     }
