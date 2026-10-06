@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using OccaSoftware.DebugDraw;
 using UnityEngine;
@@ -85,13 +86,23 @@ public class GraphRenderer : MonoBehaviour
 
     void Update()
     {
+        RenderGraph();
+    }
+
+    private void RenderGraph()
+    {
         foreach (Node from in graph.nodes)
         {
             foreach (Node to in from.connectedNodes)
             {
-                Draw.Line(from.position, to.position, color);
+                Draw.Line(WavePos(from.position), WavePos(to.position), color);
             }
             if(showNodes) Draw.Box(from.position,new Vector3(nodeSize,nodeSize,nodeSize), color);
         }
+    }
+
+    private Vector2 WavePos(Vector2 position)
+    {
+        return position + new Vector2(Mathf.Cos(Time.time + position.x), Mathf.Sin(Time.time + position.y));
     }
 }
