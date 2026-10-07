@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using OccaSoftware.DebugDraw;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class GraphEditor : MonoBehaviour
 {
@@ -22,17 +26,28 @@ public class GraphEditor : MonoBehaviour
     public bool editable = true;
     public float editRadius = 0.5f;
     public EditMode editMode = EditMode.MOVE;
+    public Dropdown editModeMenu;
     
     private Node hoveredNode;
     private Node selectedNode;
     private Camera cam;
     
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         cam = Camera.main;
+        editModeMenu.ClearOptions();
+        string[] options = Enum.GetNames(typeof(EditMode));
+        editModeMenu.AddOptions(options.ToList());
+        //editModeMenu.onValueChanged.AddListener(delegate () => { editMode = (EditMode)editModeMenu.value; } );
     }
 
+    public void SetEditMode(int index)
+    {
+        Debug.Log(index);
+        editMode = (EditMode)index;
+    }
     // Update is called once per frame
     void Update()
     {

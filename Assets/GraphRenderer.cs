@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using OccaSoftware.DebugDraw;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UIElements;
 
 public class Node
 {
@@ -66,6 +67,7 @@ public class GraphRenderer : MonoBehaviour
     public Color color = Color.white;
     public bool showNodes = true;
     float nodeSize = 0.2f;
+    public float waveStrength = 1.0f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -103,6 +105,6 @@ public class GraphRenderer : MonoBehaviour
 
     private Vector2 WavePos(Vector2 position)
     {
-        return position + new Vector2(Mathf.Cos(Time.time + position.x), Mathf.Sin(Time.time + position.y));
+        return position + new Vector2(Mathf.Cos(Time.time + position.x), Mathf.Sin(Time.time + position.y))*waveStrength;
     }
 }
