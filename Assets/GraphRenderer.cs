@@ -103,6 +103,11 @@ public class GraphRenderer : MonoBehaviour
         }
     }
 
+    public void SetRenderNodes(bool renderNodes)
+    {
+        showNodes = renderNodes;
+    }
+
     private Vector2 WavePos(Vector2 position)
     {
         return position + new Vector2(Mathf.Cos(Time.time + position.x), Mathf.Sin(Time.time + position.y))*waveStrength;

@@ -222,7 +222,19 @@ MonoBehaviour:
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2081214031}
+        m_TargetAssemblyTypeName: GraphEditor, Assembly-CSharp
+        m_MethodName: SetEditMode
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &9969029
 MonoBehaviour:
@@ -1485,13 +1497,13 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2081214028}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 2081214029}
+        m_TargetAssemblyTypeName: GraphRenderer, Assembly-CSharp
+        m_MethodName: SetRenderNodes
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2046,6 +2058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GraphRenderer
   color: {r: 1, g: 1, b: 1, a: 1}
   showNodes: 1
+  waveStrength: 1
 --- !u!4 &2081214030
 Transform:
   m_ObjectHideFlags: 0
@@ -2076,6 +2089,7 @@ MonoBehaviour:
   editable: 1
   editRadius: 0.3
   editMode: 0
+  editModeMenu: {fileID: 0}
 --- !u!1 &2119089208
 GameObject:
   m_ObjectHideFlags: 0
