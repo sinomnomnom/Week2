@@ -26,7 +26,6 @@ public class GraphEditor : MonoBehaviour
     public bool editable = true;
     public float editRadius = 0.5f;
     public EditMode editMode = EditMode.MOVE;
-    public Dropdown editModeMenu;
     
     private Node hoveredNode;
     private Node selectedNode;
@@ -37,9 +36,6 @@ public class GraphEditor : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
-        editModeMenu.ClearOptions();
-        string[] options = Enum.GetNames(typeof(EditMode));
-        editModeMenu.AddOptions(options.ToList());
         //editModeMenu.onValueChanged.AddListener(delegate () => { editMode = (EditMode)editModeMenu.value; } );
     }
 
@@ -47,6 +43,11 @@ public class GraphEditor : MonoBehaviour
     {
         Debug.Log(index);
         editMode = (EditMode)index;
+    }
+
+    public void SetEditable(bool editable)
+    {
+        this.editable = editable;
     }
     // Update is called once per frame
     void Update()
