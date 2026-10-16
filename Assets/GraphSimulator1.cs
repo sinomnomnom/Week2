@@ -1,43 +1,27 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GraphSimulator : MonoBehaviour
+public class GraphSimulator
 {
     public Graph graph;
-    public float timer = 0;
-    public float timeInterval = 3;
-    
     public Node[] inputNodes;
     public Node[] outputNodes;
     
     public bool[][] inputOutputs;
     
     public int inputIndex = 0;
-    public bool simulation = false;
-    
-    void Start()
+
+    public int timeSteps = 0;
+    public int changeInputInterval = 10;
+
+
+    public GraphSimulator(Graph graph)
     {
-        
+        this.graph = graph;
+        InitializeInputOutputs();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (simulation)
-        {
-            timer += Time.deltaTime;
-            if (timer > timeInterval)
-            {
-                timer = 0;
-                Timestep();
-            }
-        }
-    }
-    
 
     public bool[] CreateRandomOutput(int size)
     {
@@ -51,7 +35,7 @@ public class GraphSimulator : MonoBehaviour
 
     public void CreateInputOutputTable()
     {
-        inputOutputs = new bool[inputNodes.Length][];
+        inputOutputs = new bool[(int)Math.Pow(2, inputNodes.Length)][];
         for (int i = 0; i < Math.Pow(2, inputNodes.Length); i++)
         {
             bool unique = false;
@@ -72,12 +56,10 @@ public class GraphSimulator : MonoBehaviour
         }
     }
 
-    public void StartSimuation()
+    public void InitializeInputOutputs()
     {
         InitializeArrays();
         CreateInputOutputTable();
-        
-        simulation = true;
     }
 
     public void SetInputIndex(int index)
@@ -135,9 +117,23 @@ public class GraphSimulator : MonoBehaviour
         return score;
     }
 
-    void Timestep()
+    public void Timestep()
     {
-        Debug.Log("timestep");
+        timeSteps++;
+        if (timeSteps > changeInputInterval)
+        {
+            timeSteps = 0;
+            if (inputIndex < (int)Math.Pow(2, inputNodes.Length) - 1)
+            {
+                inputIndex++;
+                SetInputIndex(inputIndex);
+            }
+            else
+            {
+                inputIndex = 0;
+            }
+            
+        }
         foreach (Node node in graph.nodes)
         {
             node.Simulate1();

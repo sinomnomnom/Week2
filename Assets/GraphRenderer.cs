@@ -161,19 +161,7 @@ public class GraphRenderer : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        List<Node> nodes = new List<Node>();
-        Node originNode = new Node(new Vector2(0,0));
-        Node node2 = new Node(new Vector2(0,1));
-        Node node3 = new Node(new Vector2(1,0));
-        originNode.AddConnection(node2);
-        originNode.AddConnection(node3);
-        nodes.Add(originNode);
-        nodes.Add(node2);
-        nodes.Add(node3);
-        graph = new Graph(nodes);
         
-        GetComponent<GraphEditor>().graph = graph;
-        GetComponent<GraphSimulator>().graph = graph;
     }
 
     void Update()
@@ -204,12 +192,17 @@ public class GraphRenderer : MonoBehaviour
         switch (node.nodeType)
         {
             case Node.NodeType.INPUT_ON:
-                Draw.Sphere(WavePos(node.position),(MathF.Sin(Time.realtimeSinceStartup)+1)*nodeSize/2, Color.lawnGreen);
+                Draw.Sphere(WavePos(node.position),(MathF.Sin(Time.realtimeSinceStartup)+2)*nodeSize/2, Color.lawnGreen);
                 break;
             case Node.NodeType.INPUT_OFF:
-                Draw.Sphere(WavePos(node.position),(MathF.Sin(Time.realtimeSinceStartup)+1)*nodeSize/2, Color.darkRed);
+                Draw.Sphere(WavePos(node.position),(MathF.Sin(Time.realtimeSinceStartup)+2)*nodeSize/2, Color.darkRed);
                 break;
-            case Node.NodeType.OUTPUT:
+            case Node.NodeType.OUTPUT_OFF:
+                Draw.Box(WavePos(node.position),new Vector3((MathF.Sin(Time.realtimeSinceStartup)+1)*nodeSize/2,(MathF.Sin(Time.realtimeSinceStartup)+2)*nodeSize), Color.darkRed);
+                break;
+            case Node.NodeType.OUTPUT_ON:
+                Draw.Box(WavePos(node.position),new Vector3((MathF.Sin(Time.realtimeSinceStartup)+1)*nodeSize/2,(MathF.Sin(Time.realtimeSinceStartup)+2)*nodeSize), Color.lawnGreen);
+                break;
                 
         }
     }

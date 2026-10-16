@@ -12,14 +12,16 @@ public class GraphEditor : MonoBehaviour
 {
     public enum EditMode
     {
-        MOVE, ADD, DELETE
+        MOVE, ADD, DELETE, SET_INPUT, SET_OUTPUT
     }
 
     public Dictionary<EditMode, Color> EditColors = new Dictionary<EditMode, Color>
     {
         { EditMode.MOVE, Color.darkGreen },
         { EditMode.ADD, Color.yellow },
-        { EditMode.DELETE, Color.red}
+        { EditMode.DELETE, Color.red},
+        {EditMode.SET_INPUT, Color.blue },
+        { EditMode.SET_OUTPUT, Color.green }
     };
     
     public Graph graph;
@@ -111,6 +113,15 @@ public class GraphEditor : MonoBehaviour
                         case EditMode.MOVE:
                             break;
                         case EditMode.DELETE:
+                            break;
+                        case EditMode.SET_INPUT:
+                            if (hoveredNode != null)
+                            {
+                                hoveredNode.nodeType = Node.NodeType.INPUT_ON;
+                            }
+                            break;
+                        case EditMode.SET_OUTPUT:
+                            if (hoveredNode != null) hoveredNode.nodeType = Node.NodeType.OUTPUT_ON;
                             break;
                         default:
                             break;
