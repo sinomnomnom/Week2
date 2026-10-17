@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
             {
                 Debug.Log("timestep");
                 timer = 0;
-                int score = activeGraphSimulator.Timestep();
+                float score = activeGraphSimulator.Timestep();
                 scoreText.text = "total score: " + score.ToString();
             }
             

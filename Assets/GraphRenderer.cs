@@ -157,6 +157,25 @@ public class Graph
             node.Deactivate();
         }
     }
+    
+    public void AddNode(Node node)
+    {
+        if (node.connectedNodes != null)
+        {
+            foreach (Node node2 in node.connectedNodes)
+            {
+                if (!nodes.Contains(node2))
+                {
+                    node.RemoveConnection(node2);
+                }
+                else
+                {
+                    AddConnection(node,  node2);
+                }
+            }
+        }
+        nodes.Add(node);
+    }
 }
 public class GraphRenderer : MonoBehaviour
 {

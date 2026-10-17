@@ -16,26 +16,14 @@ public class GraphSimulator
     public int inputIndex = 0;
 
     public int timeSteps = 0;
-    public int changeInputInterval = 10;
+    public int changeInputInterval = 50;
     public int lastTotalScore = 0;
-
-
+    
     public GraphSimulator(Graph graph)
     {
         this.graph = graph;
         InitializeInputOutputs();
     }
-
-    public bool[] CreateRandomOutput(int size)
-    {
-        bool[] randOutput = new bool[size];
-        for (int i = 0; i< size; i++)
-        {
-            randOutput[i] = (Random.Range(0,2) == 0) ? false : true;
-        }
-        return randOutput;
-    }
-    //hmm
 
     public bool[][] GetAllOutputs()
     {
@@ -64,7 +52,7 @@ public class GraphSimulator
     public void Evolve(int generationSize)
     {
         int hiScore = TotalScore();
-        
+        List<Node> bestMutation = new List<Node>();
         for (int i = 0; i < generationSize; i++)
         {
             List<Node> mutation  = Mutate(2, 0);
@@ -72,11 +60,21 @@ public class GraphSimulator
             
             if (newScore > hiScore)
             {
-                Debug.Log("best Score =  " +newScore + "found after iterations: " + i);
-                break;
+                bestMutation = mutation;
+                hiScore = newScore;
             }
             Unmutate(mutation);
             graph.Deactivate();
+        }
+        Mutate(bestMutation);
+        graph.Deactivate();
+    }
+
+    public void Mutate(List<Node> mutation)
+    {
+        foreach (Node node in mutation)
+        {
+            graph.AddNode(node);
         }
     }
 
@@ -116,6 +114,7 @@ public class GraphSimulator
     {
         InitializeArrays();
         CreateInputOutputTable();
+        SetInputIndex(0);
     }
 
     public void SetInputIndex(int index)
@@ -207,7 +206,7 @@ public class GraphSimulator
         return Score();
     }
 
-    public int Timestep()
+    public float Timestep()
     {
         int end = (int)Math.Pow(2, inputNodes.Length) - 2;
 
@@ -221,6 +220,6 @@ public class GraphSimulator
         }
 
         Step();
-        return lastTotalScore;
+        return lastTotalScore/(float)(outputNodes.Length*(Math.Pow(2, inputNodes.Length) - 1)*changeInputInterval);
     }
 }
