@@ -52,13 +52,9 @@ public class Node
                     }
                 }
 
-                if (count == 0)
-                {
-                    Deactivate();
-                    return;
-                }
+                
 
-                if (count / 2 == (count + 1) / 2)
+                if (count % 2 == 0)
                 {
                     Deactivate();
                 }
@@ -101,7 +97,7 @@ public class Node
 
     public void AddConnection(Node node)
     {
-        if (!connectedNodes.Contains(node)) connectedNodes.Add(node);
+        if (!connectedNodes.Contains(node) && node != this) connectedNodes.Add(node);
     }
 
     public void RemoveConnection(Node node)
@@ -147,6 +143,19 @@ public class Graph
     {
         node1.RemoveConnection(node2);
         node2.RemoveConnection(node1);
+    }
+
+    public Node GetRandomNode()
+    {
+        return nodes[UnityEngine.Random.Range(0, nodes.Count)];
+    }
+
+    public void Deactivate()
+    {
+        foreach (Node node in nodes)
+        {
+            node.Deactivate();
+        }
     }
 }
 public class GraphRenderer : MonoBehaviour

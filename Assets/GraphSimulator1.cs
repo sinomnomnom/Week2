@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting.FullSerializer;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class GraphSimulator
@@ -14,6 +17,7 @@ public class GraphSimulator
 
     public int timeSteps = 0;
     public int changeInputInterval = 10;
+    public int lastTotalScore = 0;
 
 
     public GraphSimulator(Graph graph)
@@ -21,7 +25,6 @@ public class GraphSimulator
         this.graph = graph;
         InitializeInputOutputs();
     }
-
 
     public bool[] CreateRandomOutput(int size)
     {
@@ -32,27 +35,80 @@ public class GraphSimulator
         }
         return randOutput;
     }
+    //hmm
+
+    public bool[][] GetAllOutputs()
+    {
+        bool[][] allOutputs = new bool[(int)Math.Pow(2, outputNodes.Length)][];
+        for (int i = 0; i < Math.Pow(2, outputNodes.Length); i++)
+        {
+            allOutputs[i] = new bool[outputNodes.Length];
+            for (int j = 0; j < outputNodes.Length; j++)
+            {
+                allOutputs[i][j] = (i / (int)Math.Pow(2, j) % 2) == 0;
+            }
+        }
+        return allOutputs;
+    }
 
     public void CreateInputOutputTable()
     {
-        inputOutputs = new bool[(int)Math.Pow(2, inputNodes.Length)][];
-        for (int i = 0; i < Math.Pow(2, inputNodes.Length); i++)
+        inputOutputs = new bool[(int)Math.Pow(2, inputNodes.Length)-1][];
+        bool[][] outputs = GetAllOutputs();
+        for (int i = 0; i < Math.Pow(2, inputNodes.Length)-1; i++)
         {
-            bool unique = false;
-            bool[] tempOutputs = CreateRandomOutput(outputNodes.Length);
-            while (!unique)
+            inputOutputs[i] = outputs[i%outputs.Length];
+        }
+    }
+
+    public void Evolve(int generationSize)
+    {
+        int hiScore = TotalScore();
+        
+        for (int i = 0; i < generationSize; i++)
+        {
+            List<Node> mutation  = Mutate(2, 0);
+            int newScore = TotalScore();
+            
+            if (newScore > hiScore)
             {
-                unique = true;
-                for (int j = 0; j < i; j++)
-                {
-                    if (inputOutputs[i] != null && inputOutputs[i] == tempOutputs)
-                    {
-                        unique = false;
-                        tempOutputs = CreateRandomOutput(outputNodes.Length);
-                    }
-                }
+                Debug.Log("best Score =  " +newScore + "found after iterations: " + i);
+                break;
             }
-            inputOutputs[i] = tempOutputs;
+            Unmutate(mutation);
+            graph.Deactivate();
+        }
+    }
+
+    public List<Node> Mutate(int additions, int removals)
+    {
+        List<Node> mutatedNodes = new List<Node>();
+        for (int i = 0; i < additions; i++)
+        {
+            Node newNode = new Node(RandomNodePosition());
+            graph.nodes.Add(newNode);
+            graph.AddConnection(newNode, graph.GetRandomNode());
+            graph.AddConnection(newNode, graph.GetRandomNode());
+            if (newNode.connectedNodes.Count < 1)
+            {
+                graph.RemoveNode(newNode);
+                continue;
+            }
+            mutatedNodes.Add(newNode);
+        }
+        return mutatedNodes;
+    }
+
+    public Vector2 RandomNodePosition()
+    {
+        return new Vector2((Random.value-0.5f)*2f*3f, (Random.value-0.5f)*2f*3f);
+    }
+
+    public void Unmutate(List<Node> mutation)
+    {
+        foreach (Node node in mutation)
+        {
+            graph.RemoveNode(node);
         }
     }
 
@@ -66,12 +122,12 @@ public class GraphSimulator
     {
         for (int i = 0; i< outputNodes.Length; i++)
         {
-            outputNodes[i].nodeType = inputOutputs[index][i] ?  Node.NodeType.OUTPUT_ON : Node.NodeType.OUTPUT_OFF;
+            outputNodes[i].nodeType = inputOutputs[index][i] ? Node.NodeType.OUTPUT_ON : Node.NodeType.OUTPUT_OFF;
         }
 
         for (int i = 0; i < inputNodes.Length; i++)
         {
-            if (((index)/(int)Math.Pow(2, i))%2 == 0)
+            if (((index+1) / (int)Math.Pow(2, i)) % 2 == 0)
             {
                 inputNodes[i].nodeType = Node.NodeType.INPUT_OFF;
             }
@@ -80,7 +136,6 @@ public class GraphSimulator
                 inputNodes[i].nodeType = Node.NodeType.INPUT_ON;
             }
         }
-        
     }
 
     public void InitializeArrays()
@@ -117,30 +172,55 @@ public class GraphSimulator
         return score;
     }
 
-    public void Timestep()
+    public int TotalScore()
     {
-        timeSteps++;
-        if (timeSteps > changeInputInterval)
+        timeSteps = 0;
+        inputIndex = 0;
+        SetInputIndex(0);
+        graph.Deactivate();
+
+        int score = 0;
+        int steps = changeInputInterval * ((int)Math.Pow(2, inputNodes.Length)-1);
+        for (int i = 0; i < steps; i++)
+        {
+            score += Step();
+        }
+        timeSteps = 0;
+        inputIndex = 0;
+        SetInputIndex(0);
+        graph.Deactivate();
+        return score;
+    }
+    
+    private int Step()
+    {
+        if (timeSteps >= changeInputInterval)
         {
             timeSteps = 0;
-            if (inputIndex < (int)Math.Pow(2, inputNodes.Length) - 1)
-            {
-                inputIndex++;
-                SetInputIndex(inputIndex);
-            }
-            else
-            {
-                inputIndex = 0;
-            }
-            
+            inputIndex++;
+            SetInputIndex(inputIndex);
         }
-        foreach (Node node in graph.nodes)
+        timeSteps++;
+
+        foreach (Node node in graph.nodes) node.Simulate1();
+        foreach (Node node in graph.nodes) node.Simulate2();
+        return Score();
+    }
+
+    public int Timestep()
+    {
+        int end = (int)Math.Pow(2, inputNodes.Length) - 2;
+
+        if (timeSteps >= changeInputInterval && inputIndex == end)
         {
-            node.Simulate1();
+            Evolve(1000);
+            timeSteps = 0;
+            inputIndex = 0;
+            SetInputIndex(0);
+            lastTotalScore = TotalScore();
         }
-        foreach (Node node in graph.nodes)
-        {
-            node.Simulate2();
-        }
+
+        Step();
+        return lastTotalScore;
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,7 +9,8 @@ public class GameManager : MonoBehaviour
     private GraphSimulator activeGraphSimulator;
 
     public float timer = 0;
-    public float timeInterval = 1;
+    public float timeInterval = .5f;
+    public TextMeshProUGUI scoreText;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,12 +18,16 @@ public class GameManager : MonoBehaviour
         List<Node> nodes = new List<Node>();
         Node node1 = new Node(new Vector2(-1,0));
         Node node2 = new Node(new Vector2(1,0));
-        node1.AddConnection(node2);
-        
+        Node node3 = new Node(new Vector2(2,0));
         nodes.Add(node1);
         nodes.Add(node2);
-      
+        nodes.Add(node3);
+        node3.nodeType = Node.NodeType.INPUT_ON;
+        node1.nodeType = Node.NodeType.OUTPUT_ON;
         activeGraph = new Graph(nodes);
+        activeGraph.AddConnection(node1, node2);
+        activeGraph.AddConnection(node2, node3);
+        
         
         GetComponent<GraphEditor>().graph = activeGraph;
         GetComponent<GraphRenderer>().graph = activeGraph;
@@ -31,9 +37,13 @@ public class GameManager : MonoBehaviour
     public void ToggleSimulating()
     {
         simulate = !simulate;
-        activeGraphSimulator = new GraphSimulator(activeGraph);
     }
 
+    public void ChangeTimeInterval(float newtimeInterval)
+    {
+        this.timeInterval = 1 - newtimeInterval;
+    }
+//hmm
     // Update is called once per frame
     void Update()
     {
@@ -47,8 +57,10 @@ public class GameManager : MonoBehaviour
             timer += Time.deltaTime;
             if (timer > timeInterval)
             {
+                Debug.Log("timestep");
                 timer = 0;
-                activeGraphSimulator.Timestep();
+                int score = activeGraphSimulator.Timestep();
+                scoreText.text = "total score: " + score.ToString();
             }
             
         }
