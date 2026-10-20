@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     {
         this.timeInterval = 1 - newtimeInterval;
     }
-//hmm
+//hmmmm
     // Update is called once per frame
     void Update()
     {
