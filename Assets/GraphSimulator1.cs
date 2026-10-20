@@ -38,7 +38,7 @@ public class GraphSimulator
         }
         return allOutputs;
     }
-
+//hmm
     public void CreateInputOutputTable()
     {
         inputOutputs = new bool[(int)Math.Pow(2, inputNodes.Length)-1][];

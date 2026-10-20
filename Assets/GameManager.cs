@@ -33,6 +33,14 @@ public class GameManager : MonoBehaviour
         GetComponent<GraphRenderer>().graph = activeGraph;
         
     }
+    
+    public void ReinitializeInputOutputs()
+    {
+        if (activeGraphSimulator != null)
+        {
+            activeGraphSimulator.InitializeInputOutputs();
+        }
+    }
 
     public void ToggleSimulating()
     {

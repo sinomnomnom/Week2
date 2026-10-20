@@ -47,6 +47,8 @@ public class GraphEditor : MonoBehaviour
         editMode = (EditMode)index;
     }
 
+    
+
     public void SetEditable(bool editable)
     {
         this.editable = editable;
